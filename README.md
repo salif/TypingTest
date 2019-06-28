@@ -1,2 +1,14 @@
-# TypingTest
-Typing Test
+# Typing Test
+
+## Install
+
+```bash
+make
+make install
+```
+
+## Launch
+
+```bash
+TypingTest
+```

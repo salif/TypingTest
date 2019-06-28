@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Typing Test
+Exec=TypingTest
+Terminal=false
+Type=Application
+Categories=Utility;GTK;
+StartupNotify=false
+Hidden=false
+StartupWMClass=TypingTest
+Comment=Typing Test
