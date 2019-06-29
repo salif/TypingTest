@@ -86,32 +86,38 @@ void on_activate (GtkEntry *entry, gpointer user_data) {
   }
 }
 
-int main (int argc, char *argv[]) {
-  GObject *window;
-  GError *error = NULL;
-  gtk_init (&argc, &argv);
-  builder = gtk_builder_new ();
-  if (gtk_builder_add_from_file (builder, "/usr/share/TypingTest/window.ui", &error) == 0) {
-    g_printerr ("Error loading file: %s\n", error->message);
-    g_clear_error (&error);
-    return 1;
-  }
-
+int load_words() {
   FILE *fp;
   fp = fopen("/usr/share/TypingTest/words.txt", "r");
   for(int i=0; i<gg_all_words; i++) {
     fgets(gg_words[i], 20, (FILE*)fp);
     gg_words[i][strlen(gg_words[i])-1] = '\0';
   }
-  fclose(fp);
+  fclose (fp);
+}
 
-  window = gtk_builder_get_object (builder, "window");
+void activate (GtkApplication* app, gpointer user_data) {
+  GObject *window = gtk_builder_get_object (builder, "window");
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   g_signal_connect (gtk_builder_get_object (builder, "input"), "insert-text", G_CALLBACK (on_insert), NULL);
   g_signal_connect (gtk_builder_get_object (builder, "input"), "activate", G_CALLBACK (on_activate), NULL);
 
-  set_words(gg_words[0], gg_words[1], gg_words[2], gg_words[3], gg_words[4]);
+  set_words (gg_words[0], gg_words[1], gg_words[2], gg_words[3], gg_words[4]);
 
   gtk_main ();
-  return 0;
+}
+
+int main (int argc, char *argv[]) {
+  gtk_init (&argc, &argv);
+  
+  load_words();
+  
+  builder = gtk_builder_new_from_file ("/usr/share/TypingTest/window.ui");
+  
+  GtkApplication *app = gtk_application_new ("com.salifm.typingtest", G_APPLICATION_FLAGS_NONE);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  int status = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return status;
 }
