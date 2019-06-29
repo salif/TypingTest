@@ -8,3 +8,4 @@ StartupNotify=false
 Hidden=false
 StartupWMClass=TypingTest
 Comment=Typing Test
+Icon=accessories-text-editor

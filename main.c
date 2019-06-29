@@ -1,10 +1,22 @@
 #include <gtk/gtk.h>
 
-gboolean gg_status = TRUE;
-gint gg_typed_words = 0;
-gint gg_all_words = 50;
-gchar gg_words[50][20];
+gint gg_status = 0;
+gint gg_all_k = 0;
+gint gg_correct_k = 0;
+gint gg_incorrect_k = 0;
+gint gg_all_words = 800;
+gint gg_current = 0;
+gchar gg_words[800][20];
 GtkBuilder *builder;
+
+void end () {
+  int wpm = (gg_all_k / 5) - (gg_incorrect_k / 5);
+  char result[125];
+  double accuracy = (gg_correct_k * 100) / gg_all_k;
+  snprintf(result, 125, "%d wpm | %.2f%% acc. | %d (+%d/-%d) keystr.", wpm, accuracy, gg_all_k, gg_correct_k, gg_incorrect_k);
+  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "end")), result);
+  gg_status = 2;
+}
 
 gboolean fill (gpointer user_data) {
   GtkWidget *progress_bar = user_data;
@@ -15,28 +27,62 @@ gboolean fill (gpointer user_data) {
   if (fraction < 1.0) { 
     return TRUE;
   }
+  end();
   return FALSE;
 }
 
-void set_words(gchar *l1, gchar *l2, gchar *l3, gchar *l4, gchar *l5) {
-  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "l1")), l1);
-  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "l2")), l2);
-  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "l3")), l3);
-  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "l4")), l4);
-  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "l5")), l5);
-  gtk_label_set_use_underline(GTK_LABEL(gtk_builder_get_object (builder, "l1")), TRUE);
-}
-void on_activate(GtkEntry *entry, gpointer user_data) {
-  g_printerr (gtk_entry_get_text (entry));
-  g_printerr("\n");
-  gg_typed_words = gg_typed_words + 1;
-  gtk_entry_set_text (entry, "");
+void set_words (gchar *l1, gchar *l2, gchar *l3, gchar *l4, gchar *l5) {
+  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "word1")), l1);
+  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "word2")), l2);
+  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "word3")), l3);
+  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "word4")), l4);
+  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "word5")), l5);
 }
 
-void on_insert(GtkEntry *entry, gchar *new_text, gint new_text_length, gpointer position, gpointer user_data) {
-  if(gg_status) {
-    gg_status = FALSE;
+void trim(char * s) {
+  char * p = s;
+  int l = strlen(p);
+  while(isspace(p[l - 1])) p[--l] = 0;
+  while(* p && isspace(* p)) ++p, --l;
+  memmove(s, p, l + 1);
+}
+
+void on_insert (GtkEntry *entry, gchar *new_text, gint new_text_length, gpointer position, gpointer user_data) {
+  if(gg_status == 0) {
+    gg_status = 1;
     g_timeout_add (1000, fill, gtk_builder_get_object (builder, "progress"));
+  }
+  if(gg_status == 1){
+    if (strcmp(new_text, " ") == 0) {
+      char *input_word[20];
+      strcat(input_word, gtk_entry_get_text(entry));
+      trim(input_word);
+      if(strcmp(input_word, gg_words[gg_current]) == 0) {
+        gg_correct_k = gg_correct_k + strlen(input_word);
+      }
+      else {
+        gg_incorrect_k = gg_incorrect_k + strlen(input_word);
+      }
+      gg_all_k = gg_all_k + strlen(input_word);
+      gg_current = gg_current + 1;
+      set_words(gg_words[gg_current], gg_words[gg_current + 1], gg_words[gg_current + 2], gg_words[gg_current + 3], gg_words[gg_current + 4]);
+      gtk_entry_set_text (entry, "");
+    }
+  }
+}
+
+void on_activate (GtkEntry *entry, gpointer user_data) {
+  if(gg_status == 2) {
+    gg_status = 0;
+    gg_all_k = 0;
+    gg_correct_k = 0;
+    gg_incorrect_k = 0;
+    gg_current = 0;
+    gdouble fraction = 0.00;
+    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (gtk_builder_get_object (builder, "progress")), fraction);
+    set_words(gg_words[0], gg_words[1], gg_words[2], gg_words[3], gg_words[4]);
+    gtk_entry_set_text (entry, "");
+    gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "end")), "");
   }
 }
 
@@ -61,8 +107,8 @@ int main (int argc, char *argv[]) {
 
   window = gtk_builder_get_object (builder, "window");
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-  g_signal_connect (gtk_builder_get_object (builder, "input"), "activate", G_CALLBACK (on_activate), NULL);
   g_signal_connect (gtk_builder_get_object (builder, "input"), "insert-text", G_CALLBACK (on_insert), NULL);
+  g_signal_connect (gtk_builder_get_object (builder, "input"), "activate", G_CALLBACK (on_activate), NULL);
 
   set_words(gg_words[0], gg_words[1], gg_words[2], gg_words[3], gg_words[4]);
 

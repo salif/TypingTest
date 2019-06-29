@@ -7,6 +7,7 @@
     <property name="can_focus">False</property>
     <property name="default_width">500</property>
     <property name="default_height">200</property>
+    <property name="icon_name">accessories-text-editor</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <property name="visible">True</property>
@@ -21,96 +22,22 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkBox">
-            <property name="width_request">440</property>
-            <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
-            <child>
-              <object class="GtkLabel" id="l1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
-                <property name="track_visited_links">False</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="l2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
-                <property name="track_visited_links">False</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="l3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
-                <property name="track_visited_links">False</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="l4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
-                <property name="track_visited_links">False</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="l5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
-                <property name="track_visited_links">False</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="x">20</property>
-            <property name="y">10</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkEntry" id="input">
             <property name="width_request">400</property>
             <property name="height_request">40</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="has_focus">True</property>
+            <property name="is_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="has_default">True</property>
+            <property name="caps_lock_warning">False</property>
             <signal name="backspace" handler="on_input_backspace" swapped="no"/>
             <signal name="paste-clipboard" handler="on_input_paste_clipboard" swapped="no"/>
           </object>
           <packing>
             <property name="x">50</property>
-            <property name="y">70</property>
+            <property name="y">60</property>
           </packing>
         </child>
         <child>
@@ -122,7 +49,126 @@
           </object>
           <packing>
             <property name="x">50</property>
-            <property name="y">120</property>
+            <property name="y">100</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="width_request">400</property>
+            <property name="height_request">40</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkLabel" id="word1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">word</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">char</property>
+                <property name="track_visited_links">False</property>
+                <attributes>
+                  <attribute name="size" value="13000"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="word2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">word</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">char</property>
+                <property name="track_visited_links">False</property>
+                <attributes>
+                  <attribute name="size" value="13000"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="word3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">word</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">char</property>
+                <property name="track_visited_links">False</property>
+                <attributes>
+                  <attribute name="size" value="13000"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="word4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">word</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">char</property>
+                <property name="track_visited_links">False</property>
+                <attributes>
+                  <attribute name="size" value="13000"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="word5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">word</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">char</property>
+                <property name="track_visited_links">False</property>
+                <attributes>
+                  <attribute name="size" value="13000"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="x">50</property>
+            <property name="y">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="end">
+            <property name="width_request">400</property>
+            <property name="height_request">40</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="selectable">True</property>
+            <property name="track_visited_links">False</property>
+            <attributes>
+              <attribute name="size" value="14000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">50</property>
+            <property name="y">140</property>
           </packing>
         </child>
       </object>
