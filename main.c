@@ -8,13 +8,22 @@ gint gg_all_words = 800;
 gint gg_current = 0;
 gchar gg_words[800][20];
 GtkBuilder *builder;
+GtkApplication *app;
 
 void end () {
   int wpm = (gg_all_k / 5) - (gg_incorrect_k / 5);
   char result[125];
   double accuracy = (gg_correct_k * 100) / gg_all_k;
   snprintf(result, 125, "%d wpm | %.2f%% acc. | %d (+%d/-%d) keystr.", wpm, accuracy, gg_all_k, gg_correct_k, gg_incorrect_k);
+  g_printf("\n%s\n\n", result);
   gtk_label_set_text(GTK_LABEL(gtk_builder_get_object (builder, "end")), result);
+  
+  FILE *fr;
+  fr = fopen("/usr/share/TypingTest/log.txt", "a");
+  fputs(result, fr);
+  fputs("\n", fr);
+  fclose(fr);
+  
   gg_status = 2;
 }
 
@@ -98,13 +107,15 @@ int load_words() {
 }
 
 void activate (GtkApplication* app, gpointer user_data) {
+  builder = gtk_builder_new_from_file ("/usr/share/TypingTest/window.ui");
   GObject *window = gtk_builder_get_object (builder, "window");
+  gtk_application_add_window (app, GTK_WINDOW(window));
+  
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   g_signal_connect (gtk_builder_get_object (builder, "input"), "insert-text", G_CALLBACK (on_insert), NULL);
   g_signal_connect (gtk_builder_get_object (builder, "input"), "activate", G_CALLBACK (on_activate), NULL);
 
   set_words (gg_words[0], gg_words[1], gg_words[2], gg_words[3], gg_words[4]);
-
   gtk_main ();
 }
 
@@ -113,9 +124,7 @@ int main (int argc, char *argv[]) {
   
   load_words();
   
-  builder = gtk_builder_new_from_file ("/usr/share/TypingTest/window.ui");
-  
-  GtkApplication *app = gtk_application_new ("com.salifm.typingtest", G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new ("com.salifm.typingtest", G_APPLICATION_FLAGS_NONE);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   int status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
