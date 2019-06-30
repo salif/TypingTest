@@ -62,6 +62,7 @@ void on_insert (GtkEntry *entry, gchar *new_text, gint new_text_length, gpointer
       }
       else {
         gg_incorrect_k = gg_incorrect_k + strlen(input_word);
+        g_print("incorrect: '%s' -> '%s'\n", input_word, gg_words[gg_current]);
       }
       gg_all_k = gg_all_k + strlen(input_word);
       gg_current = gg_current + 1;
