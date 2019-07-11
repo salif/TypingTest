@@ -1,4 +1,4 @@
-Typing Test (Only Linux OS supported)
+TypingTest (Only Linux OS supported)
 
 To install run `make` and `make install`
 
