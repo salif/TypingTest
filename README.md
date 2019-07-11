@@ -1,14 +1,13 @@
-# Typing Test
+Typing Test
 
-## Install
+To install run `make` and `make install`
 
-```bash
-make
-make install
-```
+To launch run `TypingTest`
 
-## Launch
+To uninstall run:
 
-```bash
-TypingTest
-```
+`sudo rm -rf /usr/share/applications/TypingTest.desktop`
+
+`sudo rm -rf /usr/bin/TypingTest`
+
+`sudo rm -rf /usr/share/TypingTest/`
