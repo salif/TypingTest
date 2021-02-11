@@ -12,4 +12,4 @@ To uninstall run:
 
 `sudo rm -rf /usr/share/TypingTest/`
 
-If you found a bug report it here - https://github.com/salifm/TypingTest/issues/new
+If you found a bug report it here - https://github.com/salif/TypingTest/issues/new
